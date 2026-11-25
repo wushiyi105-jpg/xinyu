@@ -49,6 +49,13 @@ python -m xinyu web --port 8768
 # http://127.0.0.1:8768
 ```
 
+Run in Docker (the container uses the default port 8000):
+
+```bash
+docker build -t xinyu .
+docker run -p 8000:8000 xinyu
+```
+
 ## Command reference
 
 | Command | What it does |
@@ -62,6 +69,46 @@ python -m xinyu web --port 8768
 | `web` | Web UI |
 
 Global switches `--mock`, `--json`, `--model`, `--base-url`, `--api-key`, `--db` work anywhere.
+
+## 🤔 Why not just ask a general LLM
+
+A general model can comfort you after reading a mood entry. Xinyu adds the one thing it cannot: evidence you can check.
+
+1. **Evidence must be traceable** — when the model says "today's stress came mainly from work", it must also quote something you wrote, which the program compares word for word; a mismatch is dropped. Chat empathy reads well, but you cannot tell understanding from a template.
+2. **Trends are computed locally** — average score, volatility and the length of a low streak come from local statistics; the model writes one paragraph and may not cite numbers outside them, so the same records compute the same conclusion.
+3. **The journal stays local** — mood entries are among the most private writing there is; they sit in local SQLite and are not uploaded, and a model call sends only today's entry.
+4. **Recording and reading work offline** — with no key, word-list scoring, template advice and trends still work; finer interpretation needs a model.
+
+## 🎯 Use cases
+
+- **Three lines before bed**: what happened, how it felt, a score out of five; a week later you know which day was worst and why.
+- **A monthly review**: read the average, volatility and low streak to tell "a hard week" from "not recovering for a while".
+- **When you cannot name the feeling**: write it down and let it point at the stressor; comparing with the quoted sentence is often clearer than ruminating.
+
+## 🗺 Roadmap
+
+- **Mood and event tags**: tag entries work/family/body and split trends by tag.
+- **Weekly report**: a one-page review with the best and worst day and what changed.
+- **Gentle nudges**: one reminder after N low days, rather than a daily pop-up.
+- **Export**: write entries to Markdown to bring to a counsellor.
+- **Link with Mengji**: sleep and mood on one timeline to find where they affect each other.
+
+## ❓ FAQ
+
+**Where do I get an API key?**
+The project ships without one. It talks to DeepSeek (`https://api.deepseek.com`) by default — set `LLM_API_KEY`; any OpenAI-compatible endpoint works.
+
+**Where is data stored, and is it uploaded?**
+Mood entries are in local SQLite (default `data/xinyu.db`); a model call sends today's text only, not the history.
+
+**Does it work without a key?**
+Recording and trends work, with local word-list scoring and template advice in place of the model's finer interpretation.
+
+**How do I switch models?**
+Change `LLM_BASE_URL`, `LLM_MODEL` and `LLM_API_KEY`, or override with `--model`.
+
+**Is it a therapist?**
+No. It organises what you wrote and points at possible stressors; persistent serious distress needs a professional, and it says so when relevant.
 
 ## How it works
 
