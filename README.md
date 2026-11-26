@@ -154,6 +154,6 @@ xinyu/
 
 ## 作者
 
-shiyi · GitHub [@wushiyi105-jpg](https://github.com/wushiyi105-jpg) · wushiyi105@gmail.com
+小米 · 17612850106
 
 MIT License,Copyright (c) 2026 wushiyi105-jpg
