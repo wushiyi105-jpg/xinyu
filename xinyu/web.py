@@ -12,7 +12,7 @@ from .db import Database
 
 PAGE = """<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>心语 · 情绪日记</title>
+<title>心语 · 今天先记一句</title>
 <style>
 :root{--bg:#f7f6fb;--card:#fff;--ink:#22222b;--dim:#70707d;--accent:#5b5bd6;--line:#e4e3f2}
 *{box-sizing:border-box}
@@ -32,11 +32,66 @@ button.ghost{background:#ecebfb;color:var(--accent)}
 button:disabled{opacity:.55;cursor:wait}
 .out{white-space:pre-wrap;font:14px/1.8 Consolas,"Microsoft YaHei",monospace;background:#fbfbfe;border:1px solid var(--line);border-radius:8px;padding:14px;margin-top:12px;min-height:40px}
 .list div{padding:8px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;font-size:14px}
+
+h1{font-size:clamp(31px,5vw,39px);line-height:1.26}
+.prod{display:block;font-size:11px;line-height:1.4;letter-spacing:.18em;font-weight:650;margin-bottom:8px;opacity:.72}
+.lede,.sub{max-width:62ch;line-height:1.75}
+.route{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0 0 20px;border:1px solid var(--line);background:var(--line)}
+.route span{padding:11px 13px;background:var(--card);font-size:12px;line-height:1.5}
+.route b{display:block;font-size:10px;letter-spacing:.1em;margin-bottom:3px;opacity:.66}
+button{min-height:46px}
+input,select{min-height:44px}
+@media(max-width:680px){
+  .wrap{padding:20px 16px 56px}
+  .route{grid-template-columns:1fr}
+  h1{font-size:30px!important}
+  .row>div{min-width:100%!important}
+  button{width:100%}
+}
+
+body{background:#f3f0f3;color:#3a3342;font-family:"Songti SC","SimSun",Georgia,serif}
+.wrap{max-width:760px}
+header{padding:22px 0 20px;margin-bottom:18px;text-align:left}
+header h1{font-size:36px;line-height:1.3;letter-spacing:.01em}
+header p{color:#746b78;font-size:14px;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+.card{background:#fbf9fb;border:1px solid #ded5df;border-radius:10px;box-shadow:none}
+button{background:#6d527a;border-radius:10px;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+button:hover{background:#5b4367}
+textarea,input,select{background:#fff;border-color:#d9cfdb;border-radius:10px;line-height:1.8}
+textarea:focus,input:focus,select:focus{border-color:#6d527a;box-shadow:0 0 0 2px #e5dbe9}
+.item{border-left:2px solid #b7a8bf;line-height:1.9}
+h3{color:#6d527a;font-size:13px;letter-spacing:.1em}
+
+
+/* palette-normalized */
+:root{--bg:#f3f0f3;--card:#fbf9fb;--ink:#3a3342;--text:#3a3342;--dim:#746b78;--line:#ded5df;--accent:#6d527a}
+
+/* polish-batch1 */
+button.ghost,button.secondary{background:transparent!important;color:#6d527a!important;border:1px solid #ded5df!important}
+
+/* mobile-32 */
+
+@media(max-width:760px){
+  main{grid-template-columns:1fr!important}
+  aside{border-right:0!important;border-bottom:1px solid #ded5df;width:auto!important}
+  section{padding:16px!important}
+  .row{flex-wrap:wrap!important}
+  .row>div{min-width:100%!important}
+  h1{font-size:30px!important}
+  .route{grid-template-columns:1fr!important}
+  button{min-height:48px}
+  pre{overflow-x:auto}
+}
+
+/* mobile-height */
+@media(max-width:760px){main{min-height:auto!important}aside{min-height:0!important}}
 </style></head><body><div class="wrap">
-<h1>心语 <span id="st" class="badge"></span></h1>
-<p class="sub">记录只存在本机。分析能说清的交给规则,说不清的交给模型,但不会替你诊断。</p>
+<h1><span class="prod">心语</span>今天，先记一句 <span id="st" class="badge"></span></h1>
+<p class="sub">给想回看压力场景的人：一句话就能保存，标签由你接受或改掉；周回顾只列实际出现的场景，导出由你选。</p>
 <div class="tabs"><div class="tab on" data-t="day">今天</div><div class="tab" data-t="trend">趋势</div></div>
 
+
+  <div class="route" aria-label="任务步骤"><span><b>01</b>只写一句</span><span><b>02</b>标签自己定</span><span><b>03</b>回看这一周</span></div>
 <div class="card" id="p-day">
   <label>日期</label><input id="dDate" type="date">
   <label>今天怎么样(想到什么写什么)</label><textarea id="dText"></textarea>
