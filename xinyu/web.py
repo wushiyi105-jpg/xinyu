@@ -85,6 +85,20 @@ button.ghost,button.secondary{background:transparent!important;color:#6d527a!imp
 
 /* mobile-height */
 @media(max-width:760px){main{min-height:auto!important}aside{min-height:0!important}}
+
+/* mobile-sticky-cta */
+.mobile-cta{display:none}
+@media(max-width:760px){
+  body{padding-bottom:88px}
+  .route{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .route span{padding:8px 8px!important;font-size:11px!important;line-height:1.35!important}
+  .route b{font-size:9px!important;margin-bottom:1px!important}
+  .mobile-cta{position:fixed;left:12px;right:12px;bottom:12px;z-index:80;display:flex;
+    padding:8px;border:1px solid rgba(0,0,0,.08);border-radius:12px;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+    box-shadow:0 10px 28px rgba(16,24,40,.18)}
+  .mobile-cta button{width:100%;min-height:52px;margin:0!important;font-size:15px}
+}
 </style></head><body><div class="wrap">
 <h1><span class="prod">心语</span>今天，先记一句 <span id="st" class="badge"></span></h1>
 <p class="sub">给想回看压力场景的人：一句话就能保存，标签由你接受或改掉；周回顾只列实际出现的场景，导出由你选。</p>
@@ -128,7 +142,28 @@ $('btnTrend').onclick=async()=>{const btn=$('btnTrend');loading(btn,true);
  catch(e){$('trendOut').textContent='❌ '+e.message;}finally{loading(btn,false);}};
 (async()=>{try{const s=await api('/api/status');const b=$('st');b.textContent=s.mock?'离线模式':'模型模式';b.style.background=s.mock?'#fdecd6':'#dcefe3';b.style.color=s.mock?'#8a4a12':'#245c31';}catch(e){}
  $('dDate').value=new Date().toISOString().slice(0,10);await loadRecent();})();
-</script></body></html>"""
+</script>
+<script>
+(function(){
+  var want = "记录并分析";
+  function norm(t){ return String(t||'').replace(/\s+/g,''); }
+  var all=[].slice.call(document.querySelectorAll('button'));
+  var src=null, fallback=null;
+  for(var i=0;i<all.length;i++){
+    var b=all[i];
+    if(b.offsetParent===null||b.disabled) continue;
+    if(!fallback) fallback=b;
+    if(norm(b.textContent).indexOf(norm(want))>=0){ src=b; break; }
+  }
+  if(!src) src=fallback;
+  if(!src) return;
+  var bar=document.createElement('div'); bar.className='mobile-cta';
+  var btn=src.cloneNode(true); btn.removeAttribute('id'); btn.type='button';
+  btn.addEventListener('click',function(e){e.preventDefault(); src.click();});
+  bar.appendChild(btn); document.body.appendChild(bar);
+})();
+</script>
+</body></html>"""
 
 
 class _Handler(BaseHTTPRequestHandler):
